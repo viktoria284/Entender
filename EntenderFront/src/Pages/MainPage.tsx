@@ -27,7 +27,6 @@ const MainPage: React.FC = () => {
             <h1>New Collection</h1>
           </div>
           <CardList products={loadedProducts} />
-          <p>{`Loaded products: ${loadedProducts.length}`}</p>
         </div>
       </div>
     </div>

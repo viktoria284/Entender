@@ -11,7 +11,7 @@ namespace EntenderAPI.Models
         public string Description { get; set; }
         public string Color { get; set; }
         public decimal Price { get; set; }
-        public byte[] Image { get; set; }
+        public byte[]? Image { get; set; }
         public ICollection<ProductVariant> ProductVariants { get; set; }
         public ICollection<Image> Images { get; set; }
     }

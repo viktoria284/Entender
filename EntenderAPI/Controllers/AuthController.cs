@@ -35,7 +35,34 @@ public class AuthController : ControllerBase
         user.Password = _passwordHasher.HashPassword(user, registerDto.Password);
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
-        return Ok(new { message = "User registered successfully" });
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[]
+            {
+            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.Email, user.Email)
+        }),
+            Expires = DateTime.UtcNow.AddHours(5),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+            Issuer = _configuration["Jwt:Issuer"],
+            Audience = _configuration["Jwt:Audience"]
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        var tokenString = tokenHandler.WriteToken(token);
+
+        return Ok(new NewUserDto
+        {
+            UserId = user.UserId,
+            UserName = user.UserName,
+            Email = user.Email,
+            Token = tokenString
+        });
     }
 
     [HttpPost("login")]
@@ -59,9 +86,10 @@ public class AuthController : ControllerBase
             Subject = new ClaimsIdentity(new[]
             {
             new Claim(ClaimTypes.NameIdentifier, existingUser.UserId.ToString()),
-            new Claim(ClaimTypes.Name, existingUser.UserName)
+            new Claim(ClaimTypes.Name, existingUser.UserName),
+            new Claim(ClaimTypes.Email, existingUser.Email)
         }),
-            Expires = DateTime.UtcNow.AddHours(1),
+            Expires = DateTime.UtcNow.AddHours(5),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             Issuer = _configuration["Jwt:Issuer"],
             Audience = _configuration["Jwt:Audience"]
@@ -70,7 +98,14 @@ public class AuthController : ControllerBase
         var token = tokenHandler.CreateToken(tokenDescriptor);
         var tokenString = tokenHandler.WriteToken(token);
 
-        return Ok(new { Token = tokenString });
+        return Ok(new NewUserDto
+        {
+            UserId = existingUser.UserId,
+            UserName = existingUser.UserName,
+            Email = existingUser.Email,
+            Token = tokenString
+        });
     }
+
 
 }

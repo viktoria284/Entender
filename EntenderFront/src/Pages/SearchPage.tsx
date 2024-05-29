@@ -27,23 +27,26 @@ const SearchPage: React.FC = () => {
 
   return (
     <div>
-       <MyNavbar />
+      <MyNavbar />
       <div className="mainPage">
         <div className="container">
           <div className="main-title">
-            <h1>Results for "{query}"</h1>
+            {loading ? (
+              <h1>Loading...</h1>
+            ) : (
+              <h1>
+                {products.length === 0 ? (
+                  `No results found for "${query}"`
+                ) : (
+                  `Results for "${query}"`
+                )}
+              </h1>
+            )}
           </div>
           {loading ? (
             <p>Loading...</p>
           ) : (
-            <>
-              {products.length === 0 ? (
-                <p>No results found for "{query}"</p>
-              ) : (
-                <CardList products={products} />
-              )}
-              <p>{`Loaded products: ${products.length}`}</p>
-            </>
+            products.length > 0 && <CardList products={products} />
           )}
         </div>
       </div>

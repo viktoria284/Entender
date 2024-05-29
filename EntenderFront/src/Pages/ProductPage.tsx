@@ -18,6 +18,7 @@ interface Product {
   description: string;
   color: string;
   price: number;
+  mainImage: string;
   images: string[];
   variants: ProductVariant[];
 }
@@ -32,7 +33,7 @@ const ProductPage: React.FC = () => {
   const user = useAppSelector((state: any) => state.auth.user);
 
   useEffect(() => {
-    axios.get(`https://localhost:7200/api/products/${id}`)
+    axios.get(`https://localhost:7044/api/products/${id}`)
       .then(response => {
         setProduct(response.data);
       })
@@ -58,7 +59,7 @@ const ProductPage: React.FC = () => {
     }
     
     try {
-      const response = await axios.get(`https://localhost:7200/api/cart/checkItem`, {
+      const response = await axios.get(`https://localhost:7044/api/cart/checkItem`, {
         params: {
           userId: user.userId,
           productVariantId: productVariant.productVariantId
@@ -67,13 +68,13 @@ const ProductPage: React.FC = () => {
       const isExistingItem = response.data;
 
       if (isExistingItem) {
-        await axios.put('https://localhost:7200/api/cart/updateCartItem', {
+        await axios.put('https://localhost:7044/api/cart/updateCartItem', {
           userId: user.userId,
           productVariantId: productVariant.productVariantId,
           quantity
         });
       } else {
-          await axios.post('https://localhost:7200/api/cart/toCart', {
+          await axios.post('https://localhost:7044/api/cart/toCart', {
           userId: user.userId,
           productVariantId: productVariant.productVariantId,
           size: selectedSize,
@@ -111,12 +112,24 @@ const ProductPage: React.FC = () => {
       <MyNavbar />
       <Container className="product-page">
         <Row>
+
+          {/*<Col md={6}>
+            {product.images.map((image, index) => {
+              const imageUrl = `data:image/png;base64,${image}`;
+              return <Image key={index} src={imageUrl} alt={product.productName} fluid className="product-image"/>;
+            })}
+          </Col>*/}
+
           <Col md={6}>
+            {product.mainImage && (
+              <Image src={`data:image/png;base64,${product.mainImage}`} alt={product.productName} fluid className="product-image"/>
+            )}
             {product.images.map((image, index) => {
               const imageUrl = `data:image/png;base64,${image}`;
               return <Image key={index} src={imageUrl} alt={product.productName} fluid className="product-image"/>;
             })}
           </Col>
+
           <Col md={6} className="details">
             <h1>{product.productName}</h1>
             <p>{product.description}</p>
