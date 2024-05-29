@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif !important;
+    background-color: #edebedf3 !important;
+    padding: 0;
+}
+
+.container {
+    max-width: 1800px !important;
+    margin: 0;
+    padding: 10px;
+}
+
+.container_product {
+    max-width: 1200px;
+    margin: 0;
+    padding: 10px;
+}
+
+.mainPage {
+    padding: 10px;
+}
+
+.main-title {
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.main-title h1 {
+    font-family: Arial, sans-serif;
+    font-size: 48px;
+}

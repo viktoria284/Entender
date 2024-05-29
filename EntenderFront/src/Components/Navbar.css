@@ -1,0 +1,31 @@
+.navbar {
+    background-color: #979da2 !important;
+  }
+  
+  .navbar-brand {
+    font-weight: bold;
+    font-size: 24px;
+  }
+  
+  .navbar-text a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+  
+  .navbar-text a:hover {
+    text-decoration: underline;
+  }
+  
+  .search-form {
+    margin-right: 60px;
+  }
+  
+  .search-input {
+    margin-right: 15px;
+    width: 350px;
+  }
+  
+  .search-button {
+    width: 80px;
+  }
