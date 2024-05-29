@@ -1,0 +1,6 @@
+@EntenderAPI_HostAddress = http://localhost:5128
+
+GET {{EntenderAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
